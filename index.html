@@ -191,7 +191,6 @@
             padding: 25px;
             text-align: left;
             box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
-            position: relative;
         }
 
         .post-date {
@@ -211,81 +210,6 @@
             font-size: 14px;
             line-height: 1.6;
             color: #d3e2e0;
-        }
-
-        /* LIVE ADMINISTRATIVE POST CREATION HUB */
-        .admin-login-trigger {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .admin-toggle-btn {
-            background: none;
-            border: none;
-            color: #49b3c4;
-            cursor: pointer;
-            font-size: 12px;
-            text-decoration: underline;
-        }
-
-        .admin-panel {
-            display: none;
-            max-width: 700px;
-            margin: 25px auto 0 auto;
-            background-color: #1e312f;
-            border: 3px dashed #49b3c4;
-            border-radius: 20px;
-            padding: 20px;
-        }
-
-        .admin-form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .admin-input, .admin-textarea {
-            width: 100%;
-            background-color: #2e3b3a;
-            border: 2px solid #2b4542;
-            border-radius: 8px;
-            padding: 10px;
-            color: white;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .admin-input:focus, .admin-textarea:focus {
-            border-color: #49b3c4;
-        }
-
-        .submit-post-btn {
-            background-color: #49b3c4;
-            color: #1a2b29;
-            border: none;
-            font-weight: bold;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2);
-        }
-
-        .submit-post-btn:hover { background-color: #5cc2d4; }
-        
-        .delete-post-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: #ff4a4a;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 11px;
-            text-transform: uppercase;
-            display: none; /* Only reveals when token loaded */
         }
 
         /* DISCORD SECTION */
@@ -593,21 +517,7 @@
         <section id="posts-showcase" class="posts-section">
             <h2 class="section-heading">MY POSTS</h2>
             <div id="posts-container" class="posts-container">
-                <p style="text-align: center; color: #49b3c4;">Loading updates...</p>
-            </div>
-
-            <div class="admin-login-trigger">
-                <button id="admin-toggle" class="admin-toggle-btn">⚙️ Admin Console</button>
-            </div>
-
-            <div id="admin-panel" class="admin-panel">
-                <div class="admin-form">
-                    <input type="password" id="gh-token" class="admin-input" placeholder="Enter Git Token to Write/Delete">
-                    <input type="text" id="post-title" class="admin-input" placeholder="Post Title">
-                    <textarea id="post-content" class="admin-textarea" rows="4" placeholder="Type what's on your mind..."></textarea>
-                    <button id="submit-post" class="submit-post-btn">Publish Post</button>
                 </div>
-            </div>
         </section>
 
         <section id="discord-showcase" class="discord-section">
@@ -649,8 +559,10 @@
         </div>
     </div>
 
+    <script src="posts.js"></script>
+
     <script>
-        // --- MUSIC SETUP ENGINE ---
+        // --- MUSIC PLAYER AUDIO JOCKEY ---
         const audioTrack = document.getElementById('bg-audio');
         const playBtn = document.getElementById('audio-toggle-btn');
         const prevBtn = document.getElementById('prev-btn');
@@ -666,14 +578,17 @@
             if (shouldPlay) {
                 audioTrack.play()
                     .then(() => { playBtn.textContent = 'Pause'; })
-                    .catch(err => console.log("Direct activation loop query prompt:", err));
+                    .catch(err => console.log("Awaiting core layout selection response.", err));
             } else {
                 playBtn.textContent = 'Play';
             }
         }
 
         loadTrack(trackSelect.value, false);
-        trackSelect.addEventListener('change', () => loadTrack(trackSelect.value, true));
+
+        trackSelect.addEventListener('change', () => {
+            loadTrack(trackSelect.value, true);
+        });
 
         playBtn.addEventListener('click', () => {
             if (audioTrack.paused) {
@@ -692,7 +607,9 @@
 
         function prevSong() {
             let prevIndex = trackSelect.selectedIndex - 1;
-            if (prevIndex < 0) prevIndex = trackSelect.options.length - 1;
+            if (prevIndex < 0) {
+                prevIndex = trackSelect.options.length - 1;
+            }
             trackSelect.selectedIndex = prevIndex;
             loadTrack(trackSelect.value, true);
         }
@@ -700,121 +617,34 @@
         nextBtn.addEventListener('click', nextSong);
         prevBtn.addEventListener('click', prevSong);
         audioTrack.addEventListener('ended', nextSong);
-        volSlider.addEventListener('input', (e) => { audioTrack.volume = e.target.value; });
 
-        // --- AUTOMATED GITHUB BACKEND POSTS CONFIGURATION ---
-        const REPO = "PotTheMan/PotTheSite"; 
-        const postsContainer = document.getElementById('posts-container');
-        const adminPanel = document.getElementById('admin-panel');
-        const adminToggle = document.getElementById('admin-toggle');
-        const tokenInput = document.getElementById('gh-token');
-
-        // Toggle Admin Visibility
-        adminToggle.addEventListener('click', () => {
-            adminPanel.style.display = adminPanel.style.display === 'block' ? 'none' : 'block';
+        volSlider.addEventListener('input', (e) => {
+            audioTrack.volume = e.target.value;
         });
 
-        // Show delete buttons if a token is saved in localStorage
-        if (localStorage.getItem('gh_blog_token')) {
-            tokenInput.value = localStorage.getItem('gh_blog_token');
-        }
-
-        // Fetch & display posts from GitHub issues
-        async function fetchPosts() {
-            try {
-                const res = await fetch(`https://api.github.com/repos/${REPO}/issues?state=open&labels=blog-post`);
-                const data = await res.json();
-                
-                if (!res.ok) throw new Error();
-                
-                if (data.length === 0) {
-                    postsContainer.innerHTML = '<p style="text-align: center; color: #d3e2e0;">No posts loaded yet!</p>';
-                    return;
-                }
-
-                postsContainer.innerHTML = '';
-                const hasToken = tokenInput.value.trim() !== '';
-
-                data.forEach(issue => {
-                    const createdDate = new Date(issue.created_at).toLocaleDateString('en-US', {
-                        year: 'numeric', month: 'LONG', day: 'numeric'
-                    });
-
-                    const card = document.createElement('div');
-                    card.className = 'post-card';
-                    card.innerHTML = `
-                        <span class="post-date">${createdDate.toUpperCase()}</span>
-                        <h3 class="post-title">${escapeHTML(issue.title)}</h3>
-                        <p class="post-content">${escapeHTML(issue.body)}</p>
-                        <button class="delete-post-btn" style="display: ${hasToken ? 'block' : 'none'}" onclick="deletePost(${issue.number})">Delete</button>
-                    `;
-                    postsContainer.appendChild(card);
-                });
-            } catch (err) {
-                postsContainer.innerHTML = '<p style="text-align: center; color: #ff4a4a;">Failed to load posts container.</p>';
-            }
-        }
-
-        // Create new post issue
-        document.getElementById('submit-post').addEventListener('click', async () => {
-            const token = tokenInput.value.trim();
-            const title = document.getElementById('post-title').value.trim();
-            const content = document.getElementById('post-content').value.trim();
-
-            if (!token || !title || !content) {
-                alert('Please fill out token, title, and content body.');
+        // --- AUTOMATED DISPLAY LOOPER FOR POSTS.JS ---
+        function loadBlogFeed() {
+            const container = document.getElementById('posts-container');
+            
+            // Check if the file loaded the global variable correctly
+            if (typeof myPosts === 'undefined' || myPosts.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #d3e2e0;">No posts found yet!</p>';
                 return;
             }
 
-            localStorage.setItem('gh_blog_token', token);
+            container.innerHTML = ''; // Wipe out standard template tags
 
-            const res = await fetch(`https://api.github.com/repos/${REPO}/issues`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ title: title, body: content, labels: ['blog-post'] })
+            myPosts.forEach(post => {
+                const card = document.createElement('div');
+                card.className = 'post-card';
+                card.innerHTML = `
+                    <span class="post-date">${escapeHTML(post.date)}</span>
+                    <h3 class="post-title">${escapeHTML(post.title)}</h3>
+                    <p class="post-content">${escapeHTML(post.content)}</p>
+                `;
+                container.appendChild(card);
             });
-
-            if (res.ok) {
-                alert('Post published successfully!');
-                document.getElementById('post-title').value = '';
-                document.getElementById('post-content').value = '';
-                fetchPosts();
-            } else {
-                alert('Publishing failed. Please verify your token.');
-            }
-        });
-
-        // Delete (Close) Post Issue
-        window.deletePost = async function(issueNumber) {
-            const token = tokenInput.value.trim();
-            if (!token) return alert('Token missing.');
-
-            if (!confirm('Are you sure you want to delete this post?')) return;
-
-            const res = await fetch(`https://api.github.com/repos/${REPO}/issues/${issueNumber}`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ state: 'closed' })
-            });
-
-            if (res.ok) {
-                alert('Post removed.');
-                fetchPosts();
-            } else {
-                alert('Action failed.');
-            }
-        };
-
-        tokenInput.addEventListener('input', () => {
-            const btns = document.querySelectorAll('.delete-post-btn');
-            btns.forEach(b => b.style.display = tokenInput.value.trim() ? 'block' : 'none');
-        });
+        }
 
         function escapeHTML(str) {
             return str.replace(/[&<>'"]/g, 
@@ -822,7 +652,9 @@
             );
         }
 
-        fetchPosts();
+        // Initialize feed loop engine on page load
+        window.addEventListener('DOMContentLoaded', loadBlogFeed);
     </script>
+
 </body>
 </html>
