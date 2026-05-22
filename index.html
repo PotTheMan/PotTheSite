@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PotTheMan | Map Maker & Creator</title>
+    
+    <style>
+        /* EMBED YOUR CUSTOM FONT */
+        @font-face {
+            font-family: 'GoggaThorax';
+            src: url('Gogga_Thorax.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'GoggaThorax', Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth; 
+        }
+
+        body {
+            background-color: #3b5c59; 
+            background-image: url('background.png');
+            background-size: auto; 
+            background-repeat: repeat; 
+            background-attachment: fixed;
+            color: white;
+            overflow-x: hidden;
+            padding-bottom: 120px; /* Leave space for expanded music player */
+        }
+
+        /* Top Banner (Forest PNG Image) */
+        .banner {
+            width: 100%;
+            height: 280px; 
+            background-image: url('banner.png'); 
+            background-size: cover;
+            background-position: center;
+            border-bottom: 5px solid #2b4542;
+        }
+
+        /* Main Container */
+        .main-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Sidebar Navigation - Left Edge */
+        .sidebar {
+            position: absolute;
+            left: 40px; 
+            top: 40px;
+            background-color: white;
+            border-radius: 25px;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 150px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.4);
+            z-index: 10;
+        }
+
+        .sidebar-btn {
+            background-color: #e3e3e3;
+            color: black;
+            text-align: center;
+            padding: 15px 5px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 16px; 
+            font-weight: bold;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 -4px 0 #b5b5b5;
+        }
+
+        .sidebar-btn:hover {
+            background-color: #d1d1d1;
+            transform: translateY(-2px);
+        }
+
+        .sidebar-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 -1px 0 #b5b5b5;
+        }
+
+        /* Profile Area - Centered */
+        .profile-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            margin: 0 auto 80px auto; 
+            padding: 0 160px; 
+        }
+
+        .profile-pic {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 6px solid #456b67;
+            margin-bottom: 20px;
+            object-fit: cover;
+            box-shadow: 0px 6px 12px rgba(0,0,0,0.3);
+            background-color: transparent; 
+        }
+
+        .username {
+            font-size: 32px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 0px #1e312f;
+            letter-spacing: 2px;
+        }
+
+        .bio {
+            font-size: 14px;
+            color: #d3e2e0;
+            max-width: 550px;
+            line-height: 1.8;
+            text-shadow: 2px 2px 0px #1e312f;
+        }
+
+        /* SECTION HOUSINGS */
+        .section-heading {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 0px #1e312f;
+            letter-spacing: 1px;
+        }
+
+        .news-section, .maps-section, .discord-section {
+            padding-top: 50px;
+            margin-bottom: 60px;
+            border-top: 4px dashed #2b4542;
+        }
+
+        /* NEWS SECTION */
+        .news-card {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            text-align: center;
+        }
+
+        .news-banner {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 15px;
+            border: 5px solid #2e3b3a;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .news-text {
+            font-size: 22px;
+            line-height: 1.6;
+            color: white;
+            text-shadow: 3px 3px 0px #1e312f;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* DISCORD SECTION */
+        .discord-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #2a4441;
+            border: 4px solid #2e3b3a;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .discord-icon {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 15px;
+        }
+
+        .discord-text {
+            font-size: 26px;
+            color: white;
+            text-shadow: 2px 2px 0px #1e312f;
+            letter-spacing: 1.5px;
+        }
+
+        .discord-join-btn {
+            display: inline-block;
+            background-color: #5865F2; 
+            color: white;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px 40px;
+            border-radius: 12px;
+            border: 3px solid #2e3b3a;
+            box-shadow: inset 0 -4px 0 #3c45a3, 0px 6px 0px #1e312f;
+            transition: all 0.1s ease;
+        }
+
+        .discord-join-btn:hover {
+            background-color: #4752c4;
+            transform: translateY(-2px);
+            box-shadow: inset 0 -4px 0 #3c45a3, 0px 8px 0px #1e312f;
+        }
+
+        .discord-join-btn:active {
+            transform: translateY(4px);
+            box-shadow: inset 0 -1px 0 #3c45a3, 0px 2px 0px #1e312f;
+        }
+
+        /* MAPS SECTION */
+        .maps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        .map-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-color: #49b3c4; 
+            border: 4px solid #2e3b3a; 
+            border-radius: 20px;
+            padding: 15px;
+            text-decoration: none;
+            box-shadow: 0px 8px 0px #222b2a; 
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .map-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 12px 0px #222b2a;
+        }
+
+        .map-card:active {
+            transform: translateY(2px);
+            box-shadow: 0px 4px 0px #222b2a;
+        }
+
+        .map-thumb {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 3px solid #2e3b3a;
+        }
+
+        .map-title {
+            font-size: 18px;
+            color: white;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0px #222b2a;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+
+        .map-desc {
+            font-size: 12px;
+            color: white;
+            text-transform: uppercase;
+            line-height: 1.5;
+            text-shadow: 1.5px 1.5px 0px #222b2a;
+        }
+
+        /* FIXED PLAYLIST MUSIC PLAYER CONTAINER */
+        .music-player-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: rgba(26, 43, 41, 0.95);
+            border: 3px solid #49b3c4;
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0px 6px 16px rgba(0,0,0,0.5);
+            z-index: 1000;
+            width: 320px;
+        }
+
+        .player-row-top {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .music-title-label {
+            font-size: 11px;
+            color: #49b3c4;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .playlist-dropdown {
+            width: 100%;
+            background-color: #2e3b3a;
+            color: white;
+            border: 2px solid #49b3c4;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .player-row-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .controls-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .music-control-btn {
+            background-color: #49b3c4;
+            border: none;
+            color: #1a2b29;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2);
+            transition: transform 0.1s ease;
+        }
+
+        .music-control-btn:hover {
+            background-color: #5cc2d4;
+        }
+
+        .music-control-btn:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+        #audio-toggle-btn {
+            min-width: 60px;
+        }
+
+        .volume-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .volume-label {
+            font-size: 11px;
+            color: #d3e2e0;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 70px;
+            height: 6px;
+            border-radius: 3px;
+            background: #2e3b3a;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #49b3c4;
+            cursor: pointer;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #49b3c4;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="banner"></div>
+
+    <div class="main-container">
+        
+        <nav class="sidebar">
+            <a href="https://www.youtube.com/@PotTheMan" target="_blank" class="sidebar-btn">YT</a>
+            <a href="#maps-showcase" class="sidebar-btn">MAPS</a> 
+            <a href="#news-showcase" class="sidebar-btn">NEWS</a> 
+            <a href="#discord-showcase" class="sidebar-btn">DISCORD</a> 
+        </nav>
+
+        <div class="profile-content">
+            <img src="pfp.png" alt="PotTheMan Profile" class="profile-pic"> 
+            
+            <h1 class="username">POTTHEMAN</h1>
+            
+            <p class="bio">
+                MAP MAKER. MODLER. CONTENT CREATOR.<br>
+                THUMBNAIL MAKER. AND PFP MAKER
+            </p>
+        </div>
+
+        <section id="news-showcase" class="news-section">
+            <h2 class="section-heading">LATEST NEWS</h2>
+            <div class="news-card">
+                <img src="news-gorillacon.png" alt="Gorilla Con" class="news-banner">
+                <p class="news-text">
+                    POTTHEMAN IS GOING TO GORILLA CON!<br>
+                    IF YOU SEE ME THERE MAKE SURE TO SAY HI OR TAKE A PIC. MAKE SURE TO @ ME (;
+                </p>
+            </div>
+        </section>
+
+        <section id="maps-showcase" class="maps-section">
+            <h2 class="section-heading">MY MAPS</h2>
+            <div class="maps-grid">
+                
+                <a href="https://mod.io/g/gorilla-tag/m/rock-climbing#description" target="_blank" class="map-card">
+                    <img src="thumb-rockclimb.png" alt="Rock Climb" class="map-thumb">
+                    <h3 class="map-title">ROCK CLIMB</h3>
+                    <p class="map-desc">GO ROCK CLIMBING IN GORILLA TAG!</p>
+                </a>
+
+                <a href="https://mod.io/g/gorilla-tag/m/pottheman-forest#description" target="_blank" class="map-card">
+                    <img src="thumb-forest.png" alt="Forest+" class="map-thumb">
+                    <h3 class="map-title">FOREST+</h3>
+                    <p class="map-desc">FOREST IF IT HAD A REVAMP!</p>
+                </a>
+
+                <a href="https://mod.io/g/gorilla-tag/m/sun-tag#description" target="_blank" class="map-card">
+                    <img src="thumb-suntag.png" alt="Sun Tag" class="map-thumb">
+                    <h3 class="map-title">SUN TAG</h3>
+                    <p class="map-desc">PLAY TAG IN A HOT SCORCHED PLANET!</p>
+                </a>
+
+                <a href="https://mod.io/g/gorilla-tag/m/halloween-maze#description" target="_blank" class="map-card">
+                    <img src="thumb-cornmaze.png" alt="Jacko's Corn Maze" class="map-thumb">
+                    <h3 class="map-title">JACKO'S Corn Maze</h3>
+                    <p class="map-desc">ESCAPE A HAUNTED CORN MAZE!</p>
+                </a>
+
+            </div>
+        </section>
+
+        <section id="discord-showcase" class="discord-section">
+            <h2 class="section-heading">COMMUNITY</h2>
+            <div class="discord-card">
+                <img src="vstump_sgsg1yr.png" alt="PotTheMan Icon" class="discord-icon">
+                <h3 class="discord-text">JOIN THE DISCORD</h3>
+                <a href="https://discord.gg/XqSp3hVgpT" target="_blank" class="discord-join-btn">Join</a>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="music-player-container">
+        <audio id="bg-audio"></audio>
+        
+        <div class="player-row-top">
+            <span class="music-title-label">Select Track</span>
+            <select id="playlist-select" class="playlist-dropdown">
+                <option value="Airy_Name.mp3.mp3">Airy Name</option>
+                <option value="The Artifact Live Event.mp3">The Artifact Live Event</option>
+                <option value="Beyond_the_Sea.ogg">Beyond the Sea</option>
+                <option value="Breaking_Through_-_SECRET_ACCESS_-_Stunshine_(soundcloud,_1533715846)_(online-audio-converter.com).mp3.mp3">Breaking Through</option>
+                <option value="Mountain_Medley_Music.mp3.mp3">Mountain Medley</option>
+            </select>
+        </div>
+        
+        <div class="player-row-bottom">
+            <div class="controls-group">
+                <button id="prev-btn" class="music-control-btn">Back</button>
+                <button id="audio-toggle-btn" class="music-control-btn">Play</button>
+                <button id="next-btn" class="music-control-btn">Next</button>
+            </div>
+            
+            <div class="volume-box">
+                <span class="volume-label">VOL</span>
+                <input id="volume-range" class="volume-slider" type="range" min="0" max="1" step="0.05" value="0.5">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audioTrack = document.getElementById('bg-audio');
+        const playBtn = document.getElementById('audio-toggle-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const trackSelect = document.getElementById('playlist-select');
+        const volSlider = document.getElementById('volume-range');
+
+        // Set initial sound profile setup
+        audioTrack.volume = volSlider.value;
+
+        // Function to load and manage song changes seamlessly
+        function loadTrack(filename, shouldPlay) {
+            audioTrack.src = filename;
+            audioTrack.load();
+            if (shouldPlay) {
+                audioTrack.play()
+                    .then(() => { playBtn.textContent = 'Pause'; })
+                    .catch(err => console.log("Click play directly to start music:", err));
+            } else {
+                playBtn.textContent = 'Play';
+            }
+        }
+
+        // Initialize with the first choice on the menu list
+        loadTrack(trackSelect.value, false);
+
+        // Track selector dropdown adjustments
+        trackSelect.addEventListener('change', () => {
+            loadTrack(trackSelect.value, true);
+        });
+
+        // Main play/pause click handler
+        playBtn.addEventListener('click', () => {
+            if (audioTrack.paused) {
+                audioTrack.play()
+                    .then(() => { playBtn.textContent = 'Pause'; })
+                    .catch(err => console.log("User action tracking security catch:", err));
+            } else {
+                audioTrack.pause();
+                playBtn.textContent = 'Play';
+            }
+        });
+
+        // Playlist navigation: Forward skip
+        function nextSong() {
+            let nextIndex = trackSelect.selectedIndex + 1;
+            if (nextIndex >= trackSelect.options.length) {
+                nextIndex = 0; // Wrap back to the first song
+            }
+            trackSelect.selectedIndex = nextIndex;
+            loadTrack(trackSelect.value, true);
+        }
+
+        // Playlist navigation: Reverse back skip
+        function prevSong() {
+            let prevIndex = trackSelect.selectedIndex - 1;
+            if (prevIndex < 0) {
+                prevIndex = trackSelect.options.length - 1; // Wrap around to the last song
+            }
+            trackSelect.selectedIndex = prevIndex;
+            loadTrack(trackSelect.value, true);
+        }
+
+        nextBtn.addEventListener('click', nextSong);
+        prevBtn.addEventListener('click', prevSong);
+
+        // Automatically load next track when current one naturally concludes
+        audioTrack.addEventListener('ended', nextSong);
+
+        // Dynamic volume level controls
+        volSlider.addEventListener('input', (e) => {
+            audioTrack.volume = e.target.value;
+        });
+    </script>
+
+</body>
+</html>
