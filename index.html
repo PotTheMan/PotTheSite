@@ -58,45 +58,6 @@
             padding: 40px 20px;
         }
 
-        /* Sidebar Navigation - Left Edge */
-        .sidebar {
-            position: absolute;
-            left: 40px; 
-            top: 40px;
-            background-color: white;
-            border-radius: 25px;
-            padding: 20px 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 150px;
-            box-shadow: 0px 8px 16px rgba(0,0,0,0.4);
-            z-index: 10;
-        }
-
-        .sidebar-btn {
-            background-color: #e3e3e3;
-            color: black;
-            text-align: center;
-            padding: 15px 5px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-size: 16px; 
-            font-weight: bold;
-            transition: all 0.2s ease;
-            box-shadow: inset 0 -4px 0 #b5b5b5;
-        }
-
-        .sidebar-btn:hover {
-            background-color: #d1d1d1;
-            transform: translateY(-2px);
-        }
-
-        .sidebar-btn:active {
-            transform: translateY(1px);
-            box-shadow: inset 0 -1px 0 #b5b5b5;
-        }
-
         /* Profile Area - Centered */
         .profile-content {
             display: flex;
@@ -383,11 +344,102 @@
             text-shadow: 1px 1px 0px #000;
         }
 
-        /* --- THEME SETTINGS ACTION BUTTON --- */
-        .settings-toggle-btn {
+
+        /* ==========================================================================
+           POP-OUT SLIDE PANELS SYSTEM (NAV MENU, SETTINGS, JUKEBOX)
+           ========================================================================== */
+
+        /* --- 1. POP-OUT NAVIGATION PANEL (TOP LEFT) --- */
+        .nav-wrapper {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            z-index: 2000;
+        }
+
+        .nav-toggle-btn {
+            background-color: white;
+            color: black;
+            border: 3px solid #2b4542;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 26px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0px 6px 12px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-toggle-btn:hover {
+            transform: scale(1.08);
+        }
+
+        .sidebar-popdown-box {
+            max-height: 0;
+            overflow: hidden;
+            width: 160px;
+            background-color: white;
+            border: 0px solid #2b4542;
+            border-radius: 20px;
+            margin-top: 10px;
+            padding: 0 12px;
+            box-shadow: 0px 8px 24 rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: max-height 0.35s ease, padding 0.35s ease, border 0.2s ease;
+        }
+
+        .sidebar-popdown-box.open {
+            max-height: 500px; 
+            padding: 15px 12px;
+            border: 3px solid #2b4542;
+        }
+
+        .sidebar-btn {
+            background-color: #e3e3e3;
+            color: black;
+            text-align: center;
+            padding: 12px 5px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 15px; 
+            font-weight: bold;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 -4px 0 #b5b5b5;
+        }
+
+        .sidebar-btn:hover {
+            background-color: #d1d1d1;
+            transform: translateY(-2px);
+        }
+
+        .sidebar-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 -1px 0 #b5b5b5;
+        }
+
+
+        /* --- 2. POP-DOWN STYLE CONFIG PANEL (TOP RIGHT) --- */
+        .settings-wrapper {
             position: fixed;
             top: 25px;
             right: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            z-index: 2000;
+            text-transform: uppercase;
+        }
+
+        .settings-toggle-btn {
             background-color: white;
             color: black;
             border: 3px solid #2b4542;
@@ -401,81 +453,43 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: 0px 6px 12px rgba(0,0,0,0.4);
-            z-index: 999;
             transition: transform 0.2s ease;
         }
 
         .settings-toggle-btn:hover {
-            transform: scale(1.1) rotate(45deg);
+            transform: scale(1.05) rotate(45deg);
         }
 
-        /* SETTINGS WINDOW MODAL SCREEN OVERLAY */
-        .settings-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.75);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 2000;
-        }
-
-        .settings-modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .settings-modal-box {
+        .settings-popdown-box {
+            max-height: 0;
+            overflow: hidden;
+            width: 340px;
             background-color: #2a4441;
-            border: 4px solid #49b3c4;
-            border-radius: 20px;
-            width: 95%;
-            max-width: 580px;
-            padding: 25px;
-            box-shadow: 0px 12px 24px rgba(0,0,0,0.6);
+            border: 0px solid #49b3c4;
+            border-radius: 16px;
+            margin-top: 10px;
+            padding: 0 15px;
+            box-shadow: 0px 8px 24px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            text-transform: uppercase;
+            gap: 15px;
+            transition: max-height 0.4s ease, padding 0.4s ease, border 0.2s ease;
         }
 
-        .settings-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px dashed #2e3b3a;
-            padding-bottom: 10px;
-        }
-
-        .settings-modal-title {
-            font-size: 22px;
-            color: white;
-            text-shadow: 2px 2px 0px #1e312f;
-        }
-
-        .settings-close-btn {
-            background: none;
-            border: none;
-            color: #49b3c4;
-            font-size: 22px;
-            font-weight: bold;
-            cursor: pointer;
+        .settings-popdown-box.open {
+            max-height: 600px;
+            padding: 20px 15px;
+            border: 3px solid #49b3c4;
         }
 
         .settings-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .settings-label {
-            font-size: 13px;
+            font-size: 11px;
             color: #49b3c4;
             letter-spacing: 0.5px;
             font-weight: bold;
@@ -486,9 +500,9 @@
             background-color: #1a2b29;
             border: 2px solid #2e3b3a;
             border-radius: 8px;
-            padding: 10px;
+            padding: 8px;
             color: white;
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
         }
 
@@ -499,17 +513,17 @@
         .settings-preset-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            gap: 6px;
         }
 
         .preset-btn {
             background-color: #2e3b3a;
             border: 2px solid #49b3c4;
             color: white;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
-            padding: 8px;
-            border-radius: 8px;
+            padding: 6px 4px;
+            border-radius: 6px;
             cursor: pointer;
             text-align: center;
         }
@@ -518,40 +532,59 @@
             background-color: #3e4f4d;
         }
 
-        .settings-save-btn {
-            background-color: #49b3c4;
-            color: #1a2b29;
-            font-size: 16px;
-            font-weight: bold;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: inset 0 -4px 0 rgba(0,0,0,0.2);
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
 
-        .settings-save-btn:active {
-            transform: translateY(1px);
-            box-shadow: none;
-        }
-
-        /* FIXED PLAYLIST MUSIC PLAYER CONTAINER */
-        .music-player-container {
+        /* --- 3. POP-OUT MUSIC SLIDE PLAYER (BOTTOM RIGHT) --- */
+        .music-wrapper {
             position: fixed;
             bottom: 25px;
             right: 25px;
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            z-index: 2000;
+        }
+
+        .music-toggle-btn {
+            background-color: #49b3c4;
+            color: #1a2b29;
+            border: 3px solid #2b4542;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 22px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0px 6px 12px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease;
+        }
+
+        .music-toggle-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .music-player-container {
+            max-width: 0;
+            overflow: hidden;
             background-color: rgba(26, 43, 41, 0.95);
-            border: 3px solid #49b3c4;
+            border: 0px solid #49b3c4;
             border-radius: 16px;
-            padding: 15px;
+            padding: 15px 0; 
             display: flex;
             flex-direction: column;
             gap: 12px;
             box-shadow: 0px 6px 16px rgba(0,0,0,0.5);
-            z-index: 1000;
+            width: 0;
+            transition: max-width 0.4s ease, width 0.4s ease, padding 0.4s ease, border 0.2s ease;
+        }
+
+        .music-player-container.open {
+            max-width: 320px;
             width: 320px;
+            padding: 15px;
+            border: 3px solid #49b3c4;
         }
 
         .player-row-top {
@@ -657,27 +690,203 @@
             background: #49b3c4;
             cursor: pointer;
         }
+
+
+        /* ==========================================================================
+           RETRO MINI-GAME ARCADE ENGINE - TRUE PNG FILE TYPE CONFIG
+           ========================================================================== */
+        .game-wrapper {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            z-index: 2000;
+        }
+
+        .game-toggle-btn {
+            background-color: #f7a034;
+            color: #1a2b29;
+            border: 3px solid #2b4542;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0px 6px 12px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease;
+        }
+
+        .game-toggle-btn:hover {
+            transform: scale(1.1) rotate(-10deg);
+        }
+
+        .game-cabinet-box {
+            position: fixed;
+            bottom: 90px;
+            left: 25px;
+            width: 360px;
+            height: 220px;
+            background-color: #2a4441;
+            border: 4px solid #f7a034;
+            border-radius: 16px;
+            box-shadow: 0px 12px 32px rgba(0,0,0,0.6);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            text-transform: uppercase;
+        }
+
+        .game-cabinet-box.open {
+            display: flex;
+        }
+
+        .game-header {
+            background-color: #1e312f;
+            padding: 6px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f7a034;
+        }
+
+        .game-title-text {
+            font-size: 13px;
+            color: #f7a034;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .game-close-btn {
+            background: none;
+            border: none;
+            color: #d3e2e0;
+            font-size: 20px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .game-close-btn:hover {
+            color: white;
+        }
+
+        /* Screen Canvas Box linked to .png Background */
+        .game-screen-viewport {
+            position: relative;
+            width: 100%;
+            flex-grow: 1;
+            background-image: url('GameBacground.png');
+            background-size: auto 100%;
+            background-repeat: repeat-x;
+            background-position: 0px 0px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        /* Running Player Asset mapped to .png */
+        #game-avatar {
+            position: absolute;
+            left: 30px;
+            bottom: 0;
+            width: 32px;
+            height: 32px;
+            background-image: url('Player.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: bottom center;
+            background-color: transparent;
+        }
+
+        /* Incoming Spikes Asset mapped to .png */
+        .game-obstacle {
+            position: absolute;
+            bottom: 0;
+            width: 22px;
+            height: 28px;
+            background-image: url('obesitclw.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: bottom center;
+            background-color: transparent;
+        }
+
+        /* Retro HUD Overlays */
+        .game-hud-score {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 16px;
+            color: white;
+            text-shadow: 2px 2px 0px #000;
+            letter-spacing: 1px;
+            z-index: 10;
+        }
+
+        .game-screen-splash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(20, 34, 32, 0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+            padding: 10px;
+            z-index: 20;
+        }
+
+        .splash-main-msg {
+            font-size: 18px;
+            color: #f7a034;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        .splash-sub-msg {
+            font-size: 11px;
+            color: #d3e2e0;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
 
-    <button class="settings-toggle-btn" id="open-settings-btn">⚙</button>
+    <audio id="click-sfx" src="Keyboard_Click.ogg" preload="auto"></audio>
 
-    <div class="settings-modal-overlay" id="settings-modal">
-        <div class="settings-modal-box">
-            <div class="settings-modal-header">
-                <h3 class="settings-modal-title">Custom Styling</h3>
-                <button class="settings-close-btn" id="close-settings-btn">X</button>
-            </div>
-            
+    <div class="nav-wrapper">
+        <button class="nav-toggle-btn" id="toggle-nav-btn" title="Toggle Navigation Menu">☰</button>
+        
+        <nav class="sidebar-popdown-box" id="nav-panel">
+            <a href="https://www.youtube.com/@PotTheMan" target="_blank" class="sidebar-btn">YT</a>
+            <a href="https://mod.io/u/pottheman/" target="_blank" class="sidebar-btn">MOD.IO</a>
+            <a href="#maps-showcase" class="sidebar-btn">MAPS</a> 
+            <a href="#guides-showcase" class="sidebar-btn">GUIDES</a> 
+            <a href="#news-showcase" class="sidebar-btn">NEWS</a> 
+            <a href="#posts-showcase" class="sidebar-btn">POSTS</a> 
+            <a href="#discord-showcase" class="sidebar-btn">DISCORD</a> 
+        </nav>
+    </div>
+
+
+    <div class="settings-wrapper">
+        <button class="settings-toggle-btn" id="toggle-settings-btn" title="Toggle Custom Styling">⚙</button>
+        
+        <div class="settings-popdown-box" id="settings-panel">
             <div class="settings-group">
                 <label class="settings-label">Custom Background URL</label>
-                <input type="text" id="bg-url-input" class="settings-input-text" placeholder="e.g. background.png or direct link">
+                <input type="text" id="bg-url-input" class="settings-input-text" placeholder="Type image name or direct link">
             </div>
 
             <div class="settings-group">
                 <label class="settings-label">Custom Banner URL</label>
-                <input type="text" id="banner-url-input" class="settings-input-text" placeholder="e.g. banner.png or direct link">
+                <input type="text" id="banner-url-input" class="settings-input-text" placeholder="Type image name or direct link">
             </div>
 
             <div class="settings-group">
@@ -687,38 +896,28 @@
                     <button class="preset-btn" onclick="applyBannerPreset('ForestRevamp.png')">Forest Revamp</button>
                     <button class="preset-btn" onclick="applyBannerPreset('SunTagDesert.png')">Sun Tag Desert</button>
                     <button class="preset-btn" onclick="applyBannerPreset('Nwadew Project.jpg')">V-Stump Terminal</button>
-                    <button class="preset-btn" onclick="applyBannerPreset('CaveUpdate.png')">Cave Update</button>
-                    <button class="preset-btn" onclick="applyBannerPreset('CanyonUpdate.png')">Canyon Update</button>
+                    <button class="preset-btn" onclick="applyBannerPreset('CaveUpdate.webp')">Cave Update</button>
+                    <button class="preset-btn" onclick="applyBannerPreset('CanyonUpdate.webp')">Canyon Update</button>
                 </div>
             </div>
 
             <div class="settings-group">
                 <label class="settings-label">Select Background Preset</label>
-                <div class="settings-preset-grid" id="bg-preset-container">
-                    <button class="preset-btn" onclick="applyBgPreset('background.png')">Background 1</button>
-                    <button class="preset-btn" onclick="applyBgPreset('background2.png')">Background 2</button>
-                    <button class="preset-btn" onclick="applyBgPreset('background3.png')">Background 3</button>
-                    <button class="preset-btn" onclick="applyBgPreset('background4.png')">Background 4</button>
-                    <button class="preset-btn" onclick="applyBgPreset('background5.png')">Background 5</button>
+                <div class="settings-preset-grid">
+                    <button class="preset-btn" onclick="applyBgPreset('background.png')">BG 1</button>
+                    <button class="preset-btn" onclick="applyBgPreset('background2.png')">BG 2</button>
+                    <button class="preset-btn" onclick="applyBgPreset('background3.png')">BG 3</button>
+                    <button class="preset-btn" onclick="applyBgPreset('background4.png')">BG 4</button>
+                    <button class="preset-btn" onclick="applyBgPreset('background5.png')">BG 5</button>
                 </div>
             </div>
-
-            <button class="settings-save-btn" id="save-settings-btn">Save Changes</button>
         </div>
     </div>
+
 
     <div class="banner" id="site-banner"></div>
 
     <div class="main-container">
-        
-        <nav class="sidebar">
-            <a href="https://www.youtube.com/@PotTheMan" target="_blank" class="sidebar-btn">YT</a>
-            <a href="#maps-showcase" class="sidebar-btn">MAPS</a> 
-            <a href="#guides-showcase" class="sidebar-btn">GUIDES</a> 
-            <a href="#news-showcase" class="sidebar-btn">NEWS</a> 
-            <a href="#posts-showcase" class="sidebar-btn">POSTS</a> 
-            <a href="#discord-showcase" class="sidebar-btn">DISCORD</a> 
-        </nav>
 
         <div class="profile-content">
             <img src="pfp.png" alt="PotTheMan Profile" class="profile-pic"> 
@@ -830,8 +1029,7 @@
 
         <section id="posts-showcase" class="posts-section">
             <h2 class="section-heading">MY POSTS</h2>
-            <div id="posts-container" class="posts-container">
-                </div>
+            <div id="posts-container" class="posts-container"></div>
         </section>
 
         <section id="discord-showcase" class="discord-section">
@@ -845,46 +1043,306 @@
 
     </div>
 
-    <div class="music-player-container">
-        <audio id="bg-audio"></audio>
+
+    <div class="game-wrapper">
+        <button class="game-toggle-btn" id="toggle-game-btn" title="Play Monke Runner Game">🎮</button>
         
-        <div class="player-row-top">
-            <span class="music-title-label">Select Track</span>
-            <select id="playlist-select" class="playlist-dropdown">
-                <option value="Airy_Name.mp3.mp3">Airy Name</option>
-                <option value="The Artifact Live Event.mp3">The Artifact Live Event</option>
-                <option value="Beyond_the_Sea.ogg">Beyond the Sea</option>
-                <option value="Breaking_Through_-_SECRET_ACCESS_-_Stunshine_(soundcloud,_1533715846)_(online-audio-converter.com).mp3.mp3">Breaking Through</option>
-                <option value="Mountain_Medley_Music.mp3.mp3">Mountain Medley</option>
-            </select>
-        </div>
-        
-        <div class="player-row-bottom">
-            <div class="controls-group">
-                <button id="prev-btn" class="music-control-btn">Back</button>
-                <button id="audio-toggle-btn" class="music-control-btn">Play</button>
-                <button id="next-btn" class="music-control-btn">Next</button>
+        <div class="game-cabinet-box" id="game-cabinet">
+            <div class="game-header">
+                <span class="game-title-text">MONKE RUNNER</span>
+                <button class="game-close-btn" id="close-game-btn">×</button>
             </div>
-            
-            <div class="volume-box">
-                <span class="volume-label">VOL</span>
-                <input id="volume-range" class="volume-slider" type="range" min="0" max="1" step="0.05" value="0.5">
+            <div class="game-screen-viewport" id="game-viewport">
+                <div class="game-hud-score">SCORE: <span id="game-score-label">0</span></div>
+                <div id="game-avatar"></div>
+                
+                <div class="game-screen-splash" id="game-splash">
+                    <span class="splash-main-msg" id="splash-title">MONKE RUNNER</span>
+                    <span class="splash-sub-msg" id="splash-desc">PRESS SPACEBAR OR CLICK HERE TO JUMP OVER THE INCOMING SPIKES!</span>
+                </div>
             </div>
         </div>
     </div>
 
+
+    <div class="music-wrapper">
+        <div class="music-player-container" id="music-panel">
+            <audio id="bg-audio"></audio>
+            
+            <div class="player-row-top">
+                <span class="music-title-label">Select Track</span>
+                <select id="playlist-select" class="playlist-dropdown">
+                    <option value="Airy_Name.mp3.mp3">Airy Name</option>
+                    <option value="The Artifact Live Event.mp3">The Artifact Live Event</option>
+                    <option value="Beyond_the_Sea.ogg">Beyond the Sea</option>
+                    <option value="Breaking_Through_-_SECRET_ACCESS_-_Stunshine_(soundcloud,_1533715846)_(online-audio-converter.com).mp3.mp3">Breaking Through</option>
+                    <option value="Mountain_Medley_Music.mp3.mp3">Mountain Medley</option>
+                </select>
+            </div>
+            
+            <div class="player-row-bottom">
+                <div class="controls-group">
+                    <button id="prev-btn" class="music-control-btn">Back</button>
+                    <button id="audio-toggle-btn" class="music-control-btn">Play</button>
+                    <button id="next-btn" class="music-control-btn">Next</button>
+                </div>
+                
+                <div class="volume-box">
+                    <span class="volume-label">VOL</span>
+                    <input id="volume-range" class="volume-slider" type="range" min="0" max="1" step="0.05" value="0.5">
+                </div>
+            </div>
+        </div>
+
+        <button class="music-toggle-btn" id="toggle-music-btn" title="Toggle Jukebox Player">🎵</button>
+    </div>
+
+
     <script>
-        // --- CUSTOM STYLING CONFIG ENGINE ---
-        const siteBanner = document.getElementById('site-banner');
-        const modalOverlay = document.getElementById('settings-modal');
-        const openSettingsBtn = document.getElementById('open-settings-btn');
-        const closeSettingsBtn = document.getElementById('close-settings-btn');
-        const saveSettingsBtn = document.getElementById('save-settings-btn');
+        // --- GLOBAL INTERACTIVE BUTTON CLICK AUDIO MOTOR ---
+        const clickSfx = document.getElementById('click-sfx');
+
+        function playClickSound() {
+            clickSfx.currentTime = 0; 
+            clickSfx.play().catch(err => console.log("Audio gesture initialization missing.", err));
+        }
+
+        document.addEventListener('click', (e) => {
+            if (
+                e.target.tagName === 'BUTTON' || 
+                e.target.closest('.sidebar-btn') || 
+                e.target.closest('.map-card') || 
+                e.target.closest('.guide-card') || 
+                e.target.closest('.discord-join-btn') ||
+                e.target.id === 'toggle-game-btn' ||
+                e.target.id === 'close-game-btn'
+            ) {
+                playClickSound();
+            }
+        });
+
+
+        // --- ALL THREE DYNAMIC POP MENUS ENGINE ---
+        const toggleNavBtn = document.getElementById('toggle-nav-btn');
+        const navPanel = document.getElementById('nav-panel');
         
+        const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
+        const settingsPanel = document.getElementById('settings-panel');
+        
+        const toggleMusicBtn = document.getElementById('toggle-music-btn');
+        const musicPanel = document.getElementById('music-panel');
+
+        // 1. Toggle Navigation Menu
+        toggleNavBtn.addEventListener('click', (e) => {
+            navPanel.classList.toggle('open');
+            settingsPanel.classList.remove('open');
+            e.stopPropagation();
+        });
+
+        // 2. Toggle Settings Panel
+        toggleSettingsBtn.addEventListener('click', (e) => {
+            settingsPanel.classList.toggle('open');
+            navPanel.classList.remove('open');
+            e.stopPropagation();
+        });
+
+        // 3. Toggle Music Panel
+        toggleMusicBtn.addEventListener('click', (e) => {
+            musicPanel.classList.toggle('open');
+            e.stopPropagation();
+        });
+
+        // Close dropdowns smoothly when clicking links or page spaces anywhere outside
+        document.addEventListener('click', (e) => {
+            if (!navPanel.contains(e.target) && e.target !== toggleNavBtn) {
+                navPanel.classList.remove('open');
+            }
+            if (!settingsPanel.contains(e.target) && e.target !== toggleSettingsBtn) {
+                settingsPanel.classList.remove('open');
+            }
+            if (!musicPanel.contains(e.target) && e.target !== toggleMusicBtn) {
+                musicPanel.classList.remove('open');
+            }
+        });
+
+
+        // --- RETRO MINI-GAME CONTROLLER WITH DYNAMIC SCROLL BACKGROUND ---
+        const toggleGameBtn = document.getElementById('toggle-game-btn');
+        const closeGameBtn = document.getElementById('close-game-btn');
+        const gameCabinet = document.getElementById('game-cabinet');
+        const gameViewport = document.getElementById('game-viewport');
+        const gameAvatar = document.getElementById('game-avatar');
+        const gameScoreLabel = document.getElementById('game-score-label');
+        const gameSplash = document.getElementById('game-splash');
+        const splashTitle = document.getElementById('splash-title');
+        const splashDesc = document.getElementById('splash-desc');
+
+        let isPlaying = false;
+        let isJumping = false;
+        let score = 0;
+        let gameLoopId = null;
+        let obstacleSpawnTimeout = null;
+        let obstaclesArray = [];
+        let obstacleSpeed = 4;
+        let bgScrollPos = 0;
+
+        toggleGameBtn.addEventListener('click', () => {
+            gameCabinet.classList.toggle('open');
+            if(!gameCabinet.classList.contains('open')) {
+                stopMiniGame();
+            }
+        });
+
+        closeGameBtn.addEventListener('click', () => {
+            gameCabinet.classList.remove('open');
+            stopMiniGame();
+        });
+
+        // Game Triggers (Spacebar or Viewport Canvas Clicks)
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && gameCabinet.classList.contains('open')) {
+                e.preventDefault(); 
+                handleActionTrigger();
+            }
+        });
+
+        gameViewport.addEventListener('click', (e) => {
+            if(e.target !== closeGameBtn) {
+                handleActionTrigger();
+            }
+        });
+
+        function handleActionTrigger() {
+            if (!isPlaying) {
+                startMiniGame();
+            } else {
+                triggerJump();
+            }
+        }
+
+        function triggerJump() {
+            if (isJumping) return;
+            isJumping = true;
+            playClickSound();
+
+            let position = 0;
+            // Jump Arc Animation Interval Loop
+            let upInterval = setInterval(() => {
+                if (position >= 80) {
+                    clearInterval(upInterval);
+                    // Gravity Pull Down Loop
+                    let downInterval = setInterval(() => {
+                        if (position <= 0) {
+                            clearInterval(downInterval);
+                            isJumping = false;
+                        }
+                        position -= 5;
+                        gameAvatar.style.bottom = position + 'px';
+                    }, 18);
+                }
+                position += 6;
+                gameAvatar.style.bottom = position + 'px';
+            }, 12);
+        }
+
+        function startMiniGame() {
+            isPlaying = true;
+            score = 0;
+            obstacleSpeed = 4;
+            bgScrollPos = 0;
+            gameScoreLabel.textContent = score;
+            gameSplash.style.display = 'none';
+
+            // Clean up left overs
+            obstaclesArray.forEach(obs => obs.remove());
+            obstaclesArray = [];
+
+            clearTimeout(obstacleSpawnTimeout);
+            cancelAnimationFrame(gameLoopId);
+
+            spawnObstaclesLoop();
+            gameLoopId = requestAnimationFrame(updateGamePhysics);
+        }
+
+        function spawnObstaclesLoop() {
+            if (!isPlaying) return;
+
+            const obstacle = document.createElement('div');
+            obstacle.classList.add('game-obstacle');
+            obstacle.style.right = '-30px';
+            gameViewport.appendChild(obstacle);
+            obstaclesArray.push(obstacle);
+
+            let randomTime = Math.random() * 1200 + 900;
+            obstacleSpawnTimeout = setTimeout(spawnObstaclesLoop, randomTime);
+        }
+
+        function updateGamePhysics() {
+            if (!isPlaying) return;
+
+            // 1. Progress and update background parallax scrolling positions
+            bgScrollPos -= (obstacleSpeed * 0.4); 
+            gameViewport.style.backgroundPosition = `${bgScrollPos}px 0px`;
+
+            // 2. Move and clear obstacles loop
+            for (let i = obstaclesArray.length - 1; i >= 0; i--) {
+                let obs = obstaclesArray[i];
+                let rightVal = parseInt(obs.style.right) || 0;
+                rightVal += obstacleSpeed;
+                obs.style.right = rightVal + 'px';
+
+                let obstacleLeft = gameViewport.offsetWidth - rightVal - obs.offsetWidth;
+                let avatarBottom = parseInt(gameAvatar.style.bottom) || 0;
+
+                // Hitbox detection matched to transparency bounds 
+                if (obstacleLeft > 32 && obstacleLeft < 58 && avatarBottom < 26) {
+                    gameOverState();
+                    return;
+                }
+
+                if (obstacleLeft < -30) {
+                    obs.remove();
+                    obstaclesArray.splice(i, 1);
+                    score++;
+                    gameScoreLabel.textContent = score;
+
+                    if (score % 5 === 0 && obstacleSpeed < 9) {
+                        obstacleSpeed += 0.5;
+                    }
+                }
+            }
+
+            gameLoopId = requestAnimationFrame(updateGamePhysics);
+        }
+
+        function gameOverState() {
+            isPlaying = false;
+            cancelAnimationFrame(gameLoopId);
+            clearTimeout(obstacleSpawnTimeout);
+            
+            splashTitle.textContent = "GAME OVER";
+            splashDesc.textContent = `FINAL SCORE: ${score} | CLICK SCREEN OR SPACEBAR TO RESTART!`;
+            gameSplash.style.display = 'flex';
+        }
+
+        function stopMiniGame() {
+            isPlaying = false;
+            cancelAnimationFrame(gameLoopId);
+            clearTimeout(obstacleSpawnTimeout);
+            obstaclesArray.forEach(obs => obs.remove());
+            obstaclesArray = [];
+            gameViewport.style.backgroundPosition = "0px 0px";
+            gameSplash.style.display = 'flex';
+            splashTitle.textContent = "MONKE RUNNER";
+            splashDesc.textContent = "PRESS SPACEBAR OR CLICK HERE TO JUMP OVER THE INCOMING SPIKES!";
+        }
+
+
+        // --- STYLING PERSISTENCE STORAGE CONFIG ENGINE ---
+        const siteBanner = document.getElementById('site-banner');
         const bgUrlInput = document.getElementById('bg-url-input');
         const bannerUrlInput = document.getElementById('banner-url-input');
 
-        // Load settings from localStorage when page initializes
         window.addEventListener('DOMContentLoaded', () => {
             const savedBg = localStorage.getItem('customSiteBg');
             const savedBanner = localStorage.getItem('customSiteBanner');
@@ -901,44 +1359,40 @@
             loadBlogFeed();
         });
 
-        // Open/Close settings screen
-        openSettingsBtn.addEventListener('click', () => modalOverlay.classList.add('active'));
-        closeSettingsBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
-
-        // Save customized changes safely
-        saveSettingsBtn.addEventListener('click', () => {
-            const newBg = bgUrlInput.value.trim();
-            const newBanner = bannerUrlInput.value.trim();
-
-            if (newBg) {
-                document.body.style.backgroundImage = `url('${newBg}')`;
-                localStorage.setItem('customSiteBg', newBg);
-            } else {
-                document.body.style.backgroundImage = "url('background.png')";
-                localStorage.removeItem('customSiteBg');
-            }
-
-            if (newBanner) {
-                siteBanner.style.backgroundImage = `url('${newBanner}')`;
-                localStorage.setItem('customSiteBanner', newBanner);
-            } else {
-                siteBanner.style.backgroundImage = "url('banner.png')";
-                localStorage.removeItem('customSiteBanner');
-            }
-
-            modalOverlay.classList.remove('active');
-        });
-
-        // Fixed Preset logic to trigger live changes instantly
         function applyBannerPreset(bannerUrl) {
             bannerUrlInput.value = bannerUrl;
             siteBanner.style.backgroundImage = `url('${bannerUrl}')`;
+            localStorage.setItem('customSiteBanner', bannerUrl);
         }
 
         function applyBgPreset(bgUrl) {
             bgUrlInput.value = bgUrl;
             document.body.style.backgroundImage = `url('${bgUrl}')`;
+            localStorage.setItem('customSiteBg', bgUrl);
         }
+
+        bgUrlInput.addEventListener('input', () => {
+            const val = bgUrlInput.value.trim();
+            if(val) {
+                document.body.style.backgroundImage = `url('${val}')`;
+                localStorage.setItem('customSiteBg', val);
+            } else {
+                document.body.style.backgroundImage = "url('background.png')";
+                localStorage.removeItem('customSiteBg');
+            }
+        });
+
+        bannerUrlInput.addEventListener('input', () => {
+            const val = bannerUrlInput.value.trim();
+            if(val) {
+                siteBanner.style.backgroundImage = `url('${val}')`;
+                localStorage.setItem('customSiteBanner', val);
+            } else {
+                siteBanner.style.backgroundImage = "url('banner.png')";
+                localStorage.removeItem('customSiteBanner');
+            }
+        });
+
 
         // --- MUSIC PLAYER AUDIO JOCKEY ---
         const audioTrack = document.getElementById('bg-audio');
@@ -1000,11 +1454,13 @@
             audioTrack.volume = e.target.value;
         });
 
+
         // --- INTERACTIVE ACCORDION TOGGLE LOOP ---
         function toggleGuide(cardElement) {
             const panel = cardElement.nextElementSibling;
             panel.classList.toggle('open');
         }
+
 
         // --- AUTOMATED DISPLAY LOOPER FOR POSTS.JS ---
         function loadBlogFeed() {
