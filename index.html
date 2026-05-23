@@ -143,7 +143,7 @@
             letter-spacing: 1px;
         }
 
-        .news-section, .maps-section, .posts-section, .discord-section {
+        .news-section, .maps-section, .guides-section, .posts-section, .discord-section {
             padding-top: 50px;
             margin-bottom: 60px;
             border-top: 4px dashed #2b4542;
@@ -270,8 +270,8 @@
             box-shadow: inset 0 -1px 0 #3c45a3, 0px 2px 0px #1e312f;
         }
 
-        /* MAPS SECTION */
-        .maps-grid {
+        /* MAPS & GUIDES GRID SYSTEM */
+        .maps-grid, .guides-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
@@ -279,7 +279,7 @@
             padding: 10px 0;
         }
 
-        .map-card {
+        .map-card, .guide-card {
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -290,19 +290,20 @@
             text-decoration: none;
             box-shadow: 0px 8px 0px #222b2a; 
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
         }
 
-        .map-card:hover {
+        .map-card:hover, .guide-card:hover {
             transform: translateY(-5px);
             box-shadow: 0px 12px 0px #222b2a;
         }
 
-        .map-card:active {
+        .map-card:active, .guide-card:active {
             transform: translateY(2px);
             box-shadow: 0px 4px 0px #222b2a;
         }
 
-        .map-thumb {
+        .map-thumb, .guide-thumb {
             width: 100%;
             height: 130px;
             object-fit: cover;
@@ -310,7 +311,7 @@
             border: 3px solid #2e3b3a;
         }
 
-        .map-title {
+        .map-title, .guide-title {
             font-size: 18px;
             color: white;
             text-transform: uppercase;
@@ -319,12 +320,68 @@
             line-height: 1.2;
         }
 
-        .map-desc {
+        .map-desc, .guide-desc {
             font-size: 12px;
             color: white;
             text-transform: uppercase;
             line-height: 1.5;
             text-shadow: 1.5px 1.5px 0px #222b2a;
+        }
+
+        /* ACCORDION CONTENT HOUSING BLOCK */
+        .guide-item-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .guide-dropdown-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, margin-top 0.3s ease-out;
+            background-color: #1a2b29;
+            border: 0 solid #2e3b3a;
+            border-radius: 16px;
+            padding: 0 20px;
+            margin-top: 0;
+            box-shadow: inset 0px 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .guide-dropdown-panel.open {
+            max-height: 1500px;
+            margin-top: 15px;
+            border: 3px solid #2e3b3a;
+            padding: 25px;
+        }
+
+        .guide-inner-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #d3e2e0;
+            text-transform: uppercase;
+        }
+
+        /* CUSTOM BIG LIGHT BLUE STEP STYLING */
+        .guide-step-block {
+            margin-bottom: 20px;
+        }
+
+        .guide-step-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .guide-step-title {
+            font-size: 19px; 
+            color: #49b3c4;  /* Light Blue matching site accents */
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+            text-shadow: 2px 2px 0px #000;
+            letter-spacing: 1px;
+        }
+
+        .guide-step-text {
+            display: block;
+            text-shadow: 1px 1px 0px #000;
         }
 
         /* FIXED PLAYLIST MUSIC PLAYER CONTAINER */
@@ -458,6 +515,7 @@
         <nav class="sidebar">
             <a href="https://www.youtube.com/@PotTheMan" target="_blank" class="sidebar-btn">YT</a>
             <a href="#maps-showcase" class="sidebar-btn">MAPS</a> 
+            <a href="#guides-showcase" class="sidebar-btn">GUIDES</a> 
             <a href="#news-showcase" class="sidebar-btn">NEWS</a> 
             <a href="#posts-showcase" class="sidebar-btn">POSTS</a> 
             <a href="#discord-showcase" class="sidebar-btn">DISCORD</a> 
@@ -512,6 +570,61 @@
                     <h3 class="map-title">JACKO'S Corn Maze</h3>
                     <p class="map-desc">ESCAPE A HAUNTED CORN MAZE!</p>
                 </a>
+
+            </div>
+        </section>
+
+        <section id="guides-showcase" class="guides-section">
+            <h2 class="section-heading">MY GUIDES</h2>
+            <div class="guides-grid">
+                
+                <div class="guide-item-wrapper">
+                    <div class="guide-card" onclick="toggleGuide(this)">
+                        <img src="Nwadew Project.jpg" alt="Map Scene Set Up" class="guide-thumb">
+                        <h3 class="guide-title">MAP SCENE SET UP</h3>
+                        <p class="guide-desc">CLICK TO EXPAND DETAILED STEPS!</p>
+                    </div>
+                    <div class="guide-dropdown-panel">
+                        <div class="guide-inner-content">
+                            
+                            <div class="guide-step-block">
+                                <span class="guide-step-title">STEP 1:</span>
+                                <span class="guide-step-text">RIGHT CLICK IN ASSETS AND CREATE A SCENE. CALL IT WHATEVER YOU WANT.</span>
+                            </div>
+
+                            <div class="guide-step-block">
+                                <span class="guide-step-title">STEP 2:</span>
+                                <span class="guide-step-text">DOUBLE CLICK ON THE SCENE TO OPEN IT, IN THE SCENE MAKE SURE TO DELETE THE MAIN CAMERA.</span>
+                            </div>
+
+                            <div class="guide-step-block">
+                                <span class="guide-step-title">STEP 3:</span>
+                                <span class="guide-step-text">PRESS THE PLUS BUTTON IN THE HIERARCHY AND CREATE AN EMPTY GAME OBJECT AND NAME IT MAP.</span>
+                            </div>
+
+                            <div class="guide-step-block">
+                                <span class="guide-step-title">STEP 4:</span>
+                                <span class="guide-step-text">ON THE EMPTY GAME OBJECT CLICK "ADD COMPONENT" IN INSPECTOR AND SEARCH UP "MAP DESCRIPTER" AND CLICK ON IT. SET THE LIGHTING EXPORT TYPE TO "ALTERNATIVE" AND MAKE SURE THE EMPTY GAME OBJECTS POSITION IS 0.0.0.</span>
+                            </div>
+
+                            <div class="guide-step-block">
+                                <span class="guide-step-title">STEP 5:</span>
+                                <span class="guide-step-text">ADD A PLANE AND PLACE IT WHEREVER. IN THE SEARCH BAR IN ASSETS SEARCH "ACCESSDOORPLACE HOLDER" AND DRAG IT INTO THE SCENE AREA.</span>
+                            </div>
+
+                            <div class="guide-step-block">
+                                <span class="guide-step-title">STEP 6:</span>
+                                <span class="guide-step-text">SHIFT CLICK ALL OF THE OBJECTS AND DRAG IT INTO THE SCENE AREA. SHIFT CLICK ALL OF THE OBJECTS AND DRAG THEM INTO THE EMPTY GAME OBJECT.</span>
+                            </div>
+
+                            <div class="guide-step-block">
+                                <span class="guide-step-title">FINISH:</span>
+                                <span class="guide-step-text">AND THATS HOW YOU SET UP A SCENE FOR VSTUMP.</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </section>
@@ -622,17 +735,22 @@
             audioTrack.volume = e.target.value;
         });
 
+        // --- INTERACTIVE ACCORDION TOGGLE LOOP ---
+        function toggleGuide(cardElement) {
+            const panel = cardElement.nextElementSibling;
+            panel.classList.toggle('open');
+        }
+
         // --- AUTOMATED DISPLAY LOOPER FOR POSTS.JS ---
         function loadBlogFeed() {
             const container = document.getElementById('posts-container');
             
-            // Check if the file loaded the global variable correctly
             if (typeof myPosts === 'undefined' || myPosts.length === 0) {
                 container.innerHTML = '<p style="text-align: center; color: #d3e2e0;">No posts found yet!</p>';
                 return;
             }
 
-            container.innerHTML = ''; // Wipe out standard template tags
+            container.innerHTML = ''; 
 
             myPosts.forEach(post => {
                 const card = document.createElement('div');
@@ -652,7 +770,6 @@
             );
         }
 
-        // Initialize feed loop engine on page load
         window.addEventListener('DOMContentLoaded', loadBlogFeed);
     </script>
 
